@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const Register = () => {
 
@@ -12,8 +13,13 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleRegister({ username, email, password })
-        navigate("/")
+        try {
+            await handleRegister({ username, email, password })
+            toast.success("Registered successfully");
+            navigate("/home")
+        } catch (err) {
+            toast.error(err.message);
+        }
     };
 
     if(loading)
@@ -28,29 +34,27 @@ const Register = () => {
             <div className="form-container">
                 <h1>Register</h1>
 
-                <form onSubmit={handleSubmit}></form>
-
-                <form>
+                <form onSubmit={handleSubmit}>
 
                     <div className="input-group">
                         <label htmlFor="username">Username</label>
                         <input 
-                        onChange ={() => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value)}
                         type="text" id="username" name="username" placeholder="Enter username" />
                     </div>
 
                     <div className="input-group">
                         <label htmlFor="email">Email</label>
                         <input 
-                        onChange ={() => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         type="email" id="email" name="email" placeholder="Enter email address" />
                     </div>
 
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
                         <input 
-                        onChange ={() => setPassword(e.target.value)}
-                            type="password" id="password" name="password" placeholder="Enter password" />
+                        onChange={(e) => setPassword(e.target.value)}
+                        type="password" id="password" name="password" placeholder="Enter password" />
                     </div>
 
                     <button className="button primary-button">Register</button>
